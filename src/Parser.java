@@ -25,8 +25,8 @@ public class Parser {
 //            line = reader.readLine().replaceFirst("//.+", "").trim();
 //        }
         do {
-            line = reader.readLine();
-        } while (line.equals("") || line.contains("//"));
+            line = reader.readLine().replaceFirst("//.+", "").trim();
+        } while (line.equals("") || line.startsWith("//"));
     }
 
     public CTYPE commandType() {

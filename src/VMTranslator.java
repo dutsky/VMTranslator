@@ -29,6 +29,7 @@ public class VMTranslator {
         }
 
         for (File file : fileList) {
+            String functionName = "";
             infileName = file.getAbsolutePath();
             Parser parser = new Parser(infileName);
             CodeWriter codeWriter = new CodeWriter(outfileName);
@@ -46,7 +47,11 @@ public class VMTranslator {
                         codeWriter.writeArithmetic(parser.arg1());
                         break;
                     case C_LABEL:
-                        codeWriter.writeLabel(parser.arg1());
+                        if (!functionName.equals("")) {
+                            codeWriter.writeLabel(functionName + "$" + parser.arg1());
+                        } else {
+                            codeWriter.writeLabel(parser.arg1());
+                        }
                         break;
                     case C_GOTO:
                         codeWriter.writeGoto(parser.arg1());
@@ -55,6 +60,7 @@ public class VMTranslator {
                         codeWriter.writeIf(parser.arg1());
                         break;
                     case C_FUNCTION:
+                        functionName = parser.arg1();
                         codeWriter.writeFunction(parser.arg1(), parser.arg2());
                         break;
                     case C_CALL:
@@ -62,6 +68,7 @@ public class VMTranslator {
                         break;
                     case C_RETURN:
                         codeWriter.writeReturn();
+                        functionName = "";
                         break;
                 }
             }

@@ -248,8 +248,6 @@ public class CodeWriter {
         System.out.println("// function " + functionName + " " + numLocals);
         writeLabel(functionName);
         for (int i = 0; i < numLocals; i++) {
-            //getSegOffsetAddress("local", i);
-            //System.out.println("D=M");
             System.out.println("@0");
             System.out.println("D=A");
             PushToStack();
