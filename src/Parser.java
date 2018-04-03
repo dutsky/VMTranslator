@@ -21,12 +21,12 @@ public class Parser {
     }
 
     public void advance() throws IOException {
-        if (!line.equals("")) {
-            line = reader.readLine().replaceFirst("//.+", "").trim();
-        }
-        while(line.equals("")) {
-            line = reader.readLine().replaceFirst("//.+", "").trim();
-        }
+//        if (!line.equals("")) {
+//            line = reader.readLine().replaceFirst("//.+", "").trim();
+//        }
+        do {
+            line = reader.readLine();
+        } while (line.equals("") || line.contains("//"));
     }
 
     public CTYPE commandType() {

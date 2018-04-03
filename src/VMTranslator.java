@@ -9,20 +9,29 @@ import java.util.Objects;
 
 public class VMTranslator {
     public static void main(String[] args) throws IOException {
-        String infile = args[0];
-        File file = new File(infile);
+        File infile = new File(args[0]);
+        String infileName;
+        String outfileName;
         List<File> fileList = new ArrayList<>();
 
-        if (file.isDirectory()) {
+        if (infile.isDirectory()) {
             FilenameFilter filenameFilter = (dir, name) -> name.matches(".*.vm");
-            fileList.addAll(Arrays.asList(Objects.requireNonNull(file.listFiles(filenameFilter))));
+            fileList.addAll(Arrays.asList(Objects.requireNonNull(infile.listFiles(filenameFilter))));
+            outfileName = infile.getAbsolutePath() + File.separator + infile.getName() + ".asm";
         } else {
-            fileList.add(file.getAbsoluteFile());
+            fileList.add(infile.getAbsoluteFile());
+            outfileName = infile.getAbsolutePath().replaceFirst("[.][^.]+$", ".asm");
         }
 
-        for (File _file : fileList) {
-            Parser parser = new Parser(_file.getAbsolutePath());
-            CodeWriter codeWriter = new CodeWriter(_file.getAbsolutePath().replaceFirst("[.][^.]+$", ".asm"));
+        File outfile = new File(outfileName);
+        if (outfile.exists()) {
+            outfile.delete();
+        }
+
+        for (File file : fileList) {
+            infileName = file.getAbsolutePath();
+            Parser parser = new Parser(infileName);
+            CodeWriter codeWriter = new CodeWriter(outfileName);
 
             while (parser.hasMoreCommands()) {
                 parser.advance();

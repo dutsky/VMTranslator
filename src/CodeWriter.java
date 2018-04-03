@@ -20,7 +20,7 @@ public class CodeWriter {
         this.fileName = fileName;
         try {
 //            writer = new BufferedWriter(new FileWriter(fileName));
-            PrintStream out = new PrintStream(new FileOutputStream(fileName));
+            PrintStream out = new PrintStream(new FileOutputStream(fileName, true));
             System.setOut(out);
         } catch (IOException e) {
             System.err.println("Can't write to file " + fileName);
