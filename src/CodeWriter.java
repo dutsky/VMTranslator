@@ -257,7 +257,7 @@ public class CodeWriter {
     public void writeCall(String functionName, int numArgs) {
         System.out.println("// call " + functionName + " " + numArgs);
         // push return address
-        System.out.println("@returnAddress");
+        System.out.println("@" + functionName + "$ret");
         System.out.println("D=A");
         PushToStack();
         // push LCL
@@ -294,7 +294,7 @@ public class CodeWriter {
         System.out.println("@" + functionName);
         System.out.println("0;JMP");
         // (returnAddress)
-        writeLabel("returnAddress");
+        writeLabel(functionName + "$ret");
     }
 
     public void writeReturn() {
@@ -308,7 +308,8 @@ public class CodeWriter {
         System.out.println("@5");
         System.out.println("D=A");
         System.out.println("@endFrame");
-        System.out.println("D=M-D");
+        System.out.println("A=M-D");
+        System.out.println("D=M");
         System.out.println("@retAddr");
         System.out.println("M=D");
         // *ARG = pop

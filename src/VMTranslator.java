@@ -54,7 +54,11 @@ public class VMTranslator {
                         }
                         break;
                     case C_GOTO:
-                        codeWriter.writeGoto(parser.arg1());
+                        if (!functionName.equals("")) {
+                            codeWriter.writeGoto(functionName + "$" + parser.arg1());
+                        } else {
+                            codeWriter.writeGoto(parser.arg1());
+                        }
                         break;
                     case C_IF:
                         codeWriter.writeIf(parser.arg1());
