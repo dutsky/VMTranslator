@@ -82,7 +82,7 @@ public class CodeWriter {
                         break;
                     case "static":
                         String shortName = fileName.substring(
-                                fileName.lastIndexOf('/')+1,
+                                fileName.lastIndexOf(File.separator)+1,
                                 fileName.lastIndexOf('.')+1);
                         System.out.println("@"+ shortName + index);
                         System.out.println("D=M");
@@ -118,7 +118,7 @@ public class CodeWriter {
                 switch (segment) {
                     case "static":
                         String shortName = fileName.substring(
-                                fileName.lastIndexOf('/')+1,
+                                fileName.lastIndexOf(File.separator)+1,
                                 fileName.lastIndexOf('.')+1);
                         System.out.println("@" + shortName + index);
                         putAddrToTemp();
@@ -220,8 +220,9 @@ public class CodeWriter {
         System.out.println("D=A");
         System.out.println("@SP");
         System.out.println("M=D");
-        System.out.println("@Sys.init");
-        System.out.println("0;JMP");
+        //System.out.println("@Sys.init");
+        //System.out.println("0;JMP");
+        writeCall("Sys.init", 0);
     }
 
     public void writeLabel(String label) {

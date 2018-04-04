@@ -28,6 +28,9 @@ public class VMTranslator {
             outfile.delete();
         }
 
+        CodeWriter bootstrapWriter = new CodeWriter(outfileName);
+        bootstrapWriter.writeInit();
+
         for (File file : fileList) {
             String functionName = "";
             infileName = file.getAbsolutePath();
