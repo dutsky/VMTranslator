@@ -31,7 +31,10 @@ public class VMTranslator {
         }
 
         CodeWriter codeWriter = new CodeWriter(outfileName);
-        codeWriter.writeInit();
+
+        if (infile.isDirectory()) {
+            codeWriter.writeInit();
+        }
 
         for (File file : fileList) {
             String functionName = "";
