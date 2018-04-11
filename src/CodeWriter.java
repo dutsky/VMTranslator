@@ -3,11 +3,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CodeWriter {
+    private int ret_index = 0;
     private int eq_index = 0;
     private int gt_index = 0;
     private int lt_index = 0;
-    private String fileName;
-    private BufferedWriter writer;
+    //private BufferedWriter writer;
     private static Map<String, String> segments = new HashMap<>();
     static {
         segments.put("local", "LCL");
@@ -17,7 +17,6 @@ public class CodeWriter {
     }
 
     public CodeWriter(String fileName) {
-        this.fileName = fileName;
         try {
 //            writer = new BufferedWriter(new FileWriter(fileName));
             PrintStream out = new PrintStream(new FileOutputStream(fileName, true));
@@ -81,10 +80,7 @@ public class CodeWriter {
                         PushToStack();
                         break;
                     case "static":
-                        String shortName = fileName.substring(
-                                fileName.lastIndexOf(File.separator)+1,
-                                fileName.lastIndexOf('.')+1);
-                        System.out.println("@"+ shortName + index);
+                        System.out.println("@"+ VMTranslator.className + index);
                         System.out.println("D=M");
                         PushToStack();
                         break;
@@ -117,10 +113,7 @@ public class CodeWriter {
                 System.out.println("// pop " + segment + " " + index);
                 switch (segment) {
                     case "static":
-                        String shortName = fileName.substring(
-                                fileName.lastIndexOf(File.separator)+1,
-                                fileName.lastIndexOf('.')+1);
-                        System.out.println("@" + shortName + index);
+                        System.out.println("@" + VMTranslator.className + index);
                         putAddrToTemp();
                         PopFromStack();
                         fromDtoTempAddr();
@@ -220,8 +213,6 @@ public class CodeWriter {
         System.out.println("D=A");
         System.out.println("@SP");
         System.out.println("M=D");
-        //System.out.println("@Sys.init");
-        //System.out.println("0;JMP");
         writeCall("Sys.init", 0);
     }
 
@@ -258,7 +249,7 @@ public class CodeWriter {
     public void writeCall(String functionName, int numArgs) {
         System.out.println("// call " + functionName + " " + numArgs);
         // push return address
-        System.out.println("@" + functionName + "$ret");
+        System.out.println("@" + functionName + "$ret" + ret_index);
         System.out.println("D=A");
         PushToStack();
         // push LCL
@@ -295,7 +286,8 @@ public class CodeWriter {
         System.out.println("@" + functionName);
         System.out.println("0;JMP");
         // (returnAddress)
-        writeLabel(functionName + "$ret");
+        writeLabel(functionName + "$ret" + ret_index);
+        ret_index++;
     }
 
     public void writeReturn() {
